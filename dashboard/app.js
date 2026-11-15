@@ -155,6 +155,11 @@
     return rows;
   }
 
+  function chainList(chains) {
+    if (!chains.length) return '—';
+    if (chains.length <= 3) return chains.join(' · ');
+    return chains.slice(0, 3).join(' · ') + ' · +' + (chains.length - 3) + ' more';
+  }
   function rowHtml(r) {
     var g = r.change_7d;
     var gCls = g == null ? 'flat' : g > 0 ? 'up' : g < 0 ? 'down' : 'flat';
@@ -163,7 +168,7 @@
     return '<tr data-slug="' + esc(r.slug) + '">' +
       '<td class="num rank">' + r.rank + '</td>' +
       '<td><span class="name">' + esc(r.name) + (r.is_watchlist ? '<span class="wl">WATCHLIST</span>' : '') + '</span>' +
-      '<span class="sub2">' + esc(r.chains.join(' · ') || '—') + '</span></td>' +
+      '<span class="sub2">' + esc(chainList(r.chains)) + '</span></td>' +
       '<td>' + esc(r.category || '—') + '</td>' +
       '<td class="num">' + money(r.tvl_usd) + '</td>' +
       '<td class="num ' + gCls + '">' + pct(g) + '</td>' +
@@ -186,7 +191,7 @@
         var g = p.change_7d;
         var gCls = g == null ? 'flat' : g > 0 ? 'up' : g < 0 ? 'down' : 'flat';
         return '<tr data-slug="' + esc(p.slug) + '"><td><span class="name">' + esc(p.name) + '</span>' +
-          '<span class="sub2">' + esc(p.chains.join(' · ') || '—') + '</span></td>' +
+          '<span class="sub2">' + esc(chainList(p.chains)) + '</span></td>' +
           '<td>' + esc(p.category || '—') + '</td>' +
           '<td class="num">' + money(p.tvl_usd) + '</td>' +
           '<td class="num">' + money(p.mcap_usd) + '</td>' +
