@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — pre-token protocols, ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="pulse"></span> TOKEN RADAR <span class="ver">radar-2</span></div>
+  <div class="asof">Snapshot <span id="asof">—</span> · DefiLlama protocol index · no token, no problem</div>
+</header>
+<main>
+  <section class="lede">
+    <h1>Which tokenless protocol would be worth the most <em>if it launched a token tomorrow?</em></h1>
+    <p class="sub" id="lede-sub">Every protocol in the snapshot with no token at all, ranked by the value a token would
+    imply — priced off the live market, not a flat guess. Wrapped, staked and bridge derivatives are
+    out; the watchlist is in, all forty of them.</p>
+    <div class="facts" id="facts"></div>
+    <div class="spot" id="spotlight" aria-label="Top three"></div>
+  </section>
+
+  <section class="controls">
+    <div class="tabs" role="tablist" aria-label="Board view">
+      <button id="tab-pre" class="tab active" role="tab" aria-selected="true">Pre-token board</button>
+      <button id="tab-live" class="tab" role="tab" aria-selected="false">Live tokens · the comps</button>
+    </div>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Search name or slug…" aria-label="Search protocols" autocomplete="off">
+      <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+      <select id="chain" aria-label="Filter by chain"><option value="">All chains</option></select>
+      <label class="check"><input id="wl" type="checkbox"> Watchlist only</label>
+      <select id="sort" aria-label="Sort board">
+        <option value="implied">Sort: implied value</option>
+        <option value="tvl">Sort: TVL</option>
+        <option value="growth">Sort: 7-day change</option>
+        <option value="age">Sort: age</option>
+        <option value="name">Sort: name</option>
+      </select>
+    </div>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section id="board-wrap">
+    <table id="board">
+      <thead><tr>
+        <th class="num">#</th><th>Protocol</th><th>Category</th><th class="num">TVL</th>
+        <th class="num">7d</th><th class="num">Age</th><th class="num">Multiple</th><th class="num">Implied value</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <table id="live" hidden>
+      <thead><tr>
+        <th>Protocol</th><th>Category</th><th class="num">TVL</th>
+        <th class="num">Market cap</th><th class="num">FDV / TVL</th><th class="num">7d</th>
+      </tr></thead>
+      <tbody id="live-rows"></tbody>
+    </table>
+    <p class="empty" id="empty" hidden>No protocol matches these filters. Clear the search or widen the category.</p>
+  </section>
+
+  <section class="model" id="model">
+    <h2>How the implied value is built</h2>
+    <p class="formula">implied = TVL × category multiple × growth × maturity × chains</p>
+    <p>The multiple is earned, not assumed. For each category it is the median FDV/TVL of the
+    live-token protocols in that same category — ratios winsorized to 0.02–3.0, clamped to 0.05–1.0.
+    A category with fewer than three live comps falls back to the market-wide median
+    (<span id="global-mult">—</span>). Growth is the 7-day TVL change, clamped to −50…+100% and weighted
+    0.6; maturity rises from 0.6 for a brand-new listing to 1.0 at three years; each extra chain adds
+    2%, up to five. Excluded from the board: exchanges, versioned pools (Aave V3 and the like),
+    protocols whose name contains wrapped, staked or staking, and the derivative categories —
+    Bridge, Canonical Bridge, Cross Chain Bridge, Liquid Staking, Liquid Restaking, Restaked BTC and
+    Stablecoin Wrapper. The forty watchlist names are ranked as the brief requires, whatever their
+    category.</p>
+    <table id="mults">
+      <thead><tr><th>Category</th><th class="num">Live comps</th><th class="num">Median FDV / TVL</th><th class="num">Multiple used</th></tr></thead>
+      <tbody id="mult-rows"></tbody>
+    </table>
+    <p class="note">Every row's detail view recomputes its implied value from the snapshot's own figures,
+    in the page, and says whether the recompute matches the board.</p>
+  </section>
+
+  <footer>
+    <p>Implied value is a model, not a promise: it prices a token that does not exist yet, off
+    comparables that do. Farm plans are a starting point, not a guarantee of an airdrop — use a fresh
+    wallet, never pay to claim, and read the protocol's own points page before you act. Data: the
+    sealed snapshot of 2026-11-14; the board is computed from it at build time and rendered here
+    with no network.</p>
+  </footer>
+</main>
+
+<dialog id="detail" aria-label="Protocol detail"></dialog>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
